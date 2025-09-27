@@ -1,5 +1,7 @@
+import 'package:drishtitech/features/auth/pages/login_page.dart';
 import 'package:drishtitech/features/auth/pages/signup_page.dart';
 import 'package:drishtitech/features/auth/providers/auth_provider.dart';
+import 'package:drishtitech/features/home/home_page.dart';
 import 'package:drishtitech/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +25,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: MultiProvider(
           providers: [ChangeNotifierProvider(create: (_) => AuthProvider())],
-          child: SignupPage()),
+          child: Consumer<AuthProvider>(
+              builder: (context, provider, child) =>
+                  provider.isLoggedIn ? HomePage() : SignupPage())),
     );
   }
 }
