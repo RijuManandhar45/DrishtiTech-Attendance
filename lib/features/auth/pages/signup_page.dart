@@ -1,4 +1,6 @@
+import 'package:drishtitech/core/utils.dart';
 import 'package:drishtitech/features/auth/providers/auth_provider.dart';
+import 'package:drishtitech/features/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +15,26 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = context.read<AuthProvider>();
+
+      provider.addListener(() {
+        if (provider.statusUtils == StatusUtils.success) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Signup Sucessful!"),
+          ));
+        }
+        if (provider.statusUtils == StatusUtils.error) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Invalid")));
+        }
+      });
+    });
+    // TODO: implement initState
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -91,7 +113,7 @@ class _SignupPageState extends State<SignupPage> {
                         foregroundColor: Colors.white,
                       ),
                       onPressed: () {
-                        authProvider.loginPage(_emailController.text.trim(),
+                        authProvider.signinPage(_emailController.text.trim(),
                             _passwordController.text.trim());
                       },
                       child: Row(
